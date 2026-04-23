@@ -167,3 +167,5 @@ cython_debug/
 
 # VS Code project settings
 .vscode/
+
+equity_info
