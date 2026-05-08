@@ -45,6 +45,11 @@ class TushareEquityHistoricalQueryParams(EquityHistoricalQueryParams):
         description="Whether to use a cached request. The quote is cached for one hour.",
     )
 
+    adjustment: Optional[Literal["qfq", "hfq"]] = Field(
+        default=None,
+        description="Adjustment type for historical prices. 'qfq' for forward-adjusted (前复权), 'hfq' for backward-adjusted (后复权). None means no adjustment.",
+    )
+
     @field_validator("symbol", mode="before", check_fields=False)
     @classmethod
     def _normalize_symbol(cls, v: object) -> object:
@@ -107,8 +112,16 @@ class TushareEquityHistoricalFetcher(
         from openbb_tushare.utils.ts_equity_historical import get_from_cache
 
         api_key = credentials.get("tushare_api_key") if credentials else ""
-        data = get_from_cache(ts_code=query.symbol, start_date=query.start_date, end_date=query.end_date, 
-                           api_key=api_key, period="daily", use_cache=query.use_cache)
+        adjust = query.adjustment if query.adjustment else ""
+        data = get_from_cache(
+            ts_code=query.symbol,
+            start_date=query.start_date,
+            end_date=query.end_date,
+            api_key=api_key,
+            period="daily",
+            use_cache=query.use_cache,
+            adjust=adjust,
+        )
 
         if data.empty:
             raise EmptyDataError()

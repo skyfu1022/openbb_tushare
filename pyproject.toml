@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "openbb-tushare"
-version = "1.2.0"
+version = "1.2.2"
 description = "OpenBB extension for Tushare"
 authors = ["Roger Ye <shugaoye@yahoo.com>"]
 license = "AGPL-3.0-only"
