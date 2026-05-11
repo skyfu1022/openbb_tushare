@@ -22,6 +22,11 @@ pytest = "^9.0.3"
 pytest-freezer = "^0.4.9"
 # Replace pytest-freezegun with pytest-freezer for Python 3.13 compatibility
 
+[tool.pytest.ini_options]
+markers = [
+    "integration: integration tests that call real Tushare API (requires TUSHARE_API_KEY)",
+]
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

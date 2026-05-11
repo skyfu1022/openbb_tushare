@@ -10,7 +10,12 @@ from openbb_tushare.models.equity_quote import TushareEquityQuoteFetcher
 from openbb_tushare.models.equity_search import TushareEquitySearchFetcher
 from openbb_tushare.models.etf_search import TushareEtfSearchFetcher
 from openbb_tushare.models.historical_dividends import TushareHistoricalDividendsFetcher
+from openbb_tushare.models.etf_historical import TushareEtfHistoricalFetcher
 from openbb_tushare.models.income_statement import TushareIncomeStatementFetcher
+from openbb_tushare.models.index_constituents import TushareIndexConstituentsFetcher
+from openbb_tushare.models.index_historical import TushareIndexHistoricalFetcher
+from openbb_tushare.models.index_info import TushareIndexInfoFetcher
+from openbb_tushare.models.index_search import TushareIndexSearchFetcher
 
 # mypy: disable-error-code="list-item"
 
@@ -31,6 +36,11 @@ provider = Provider(
         "EquitySearch": TushareEquitySearchFetcher,
         "EtfSearch": TushareEtfSearchFetcher,
         "HistoricalDividends": TushareHistoricalDividendsFetcher,
+        "EtfHistorical": TushareEtfHistoricalFetcher,
+        "IndexConstituents": TushareIndexConstituentsFetcher,
+        "IndexHistorical": TushareIndexHistoricalFetcher,
+        "IndexInfo": TushareIndexInfoFetcher,
+        "IndexSearch": TushareIndexSearchFetcher,
         "IncomeStatement": TushareIncomeStatementFetcher,
     }
 )
