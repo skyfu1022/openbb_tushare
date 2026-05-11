@@ -8,7 +8,7 @@ readme = "README.md"
 packages = [{ include = "openbb_tushare" }]
 
 [tool.poetry.dependencies]
-python = ">=3.13,<=3.14.3"
+python = ">=3.12"
 openbb = "4.7.1"
 openbb-core = { version = "^1.6.8" }
 tushare = "^1.4.29"
