@@ -199,10 +199,12 @@ def check_cache(
     Returns:
         bool: True if cache is valid, False otherwise.
     """
-    from openbb_tushare.utils.ak_helpers import get_list_date
+    from openbb_tushare.utils.ts_helpers import get_list_date
     from mysharelib.tools import last_closing_day
-    
-    start = get_list_date(symbol)
+
+    start_str = get_list_date(symbol, api_key=api_key)
+    from datetime import datetime as dt
+    start = dt.strptime(start_str, "%Y%m%d").date()
     end = last_closing_day()
     cache_df = cache.fetch_date_range(start.strftime("%Y%m%d"), end.strftime("%Y%m%d"))
     
