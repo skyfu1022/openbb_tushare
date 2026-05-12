@@ -26,7 +26,8 @@ EQUITY_HISTORY_SCHEMA = {
     "vwap": "REAL",
     "change": "REAL",
     "change_percent": "REAL",
-    "amount": "REAL"
+    "amount": "REAL",
+    "adj_factor": "REAL",
 }
 
 def get_from_cache(
@@ -154,11 +155,14 @@ def get_one(
             )
             logger.info(f"Downloaded {adjust} adjusted historical data {normalized_ts_code}: {len(df_data)} rows from {start_date_str} to {end_date_str}.")
         else:
-            # A-share without adjustment - use daily
-            df_data = pro.daily(
+            # A-share without adjustment - use pro_bar to get adj_factor
+            freq = 'D' if period == 'daily' else 'W' if period == 'weekly' else 'M'
+            ts.set_token(tushare_api_key)
+            df_data = ts.pro_bar(
                 ts_code=normalized_ts_code,
                 start_date=start_date_str,
-                end_date=end_date_str
+                end_date=end_date_str,
+                freq=freq,
             )
             logger.info(f"Downloaded historical data {normalized_ts_code}: {len(df_data)} rows from {start_date_str} to {end_date_str}.")
 
@@ -174,8 +178,6 @@ def get_one(
     # Drop unnecessary columns
     if 'ts_code' in df_data.columns:
         df_data.drop(columns=['ts_code'], inplace=True)
-    if 'adj_factor' in df_data.columns:
-        df_data.drop(columns=['adj_factor'], inplace=True)
     
     return df_data
 

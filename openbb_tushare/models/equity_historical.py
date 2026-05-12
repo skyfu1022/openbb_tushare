@@ -78,6 +78,10 @@ class TushareEquityHistoricalData(EquityHistoricalData):
         description="Change in the price from the previous close, as a normalized percent.",
         json_schema_extra={"x-unit_measurement": "percent", "x-frontend_multiply": 100},
     )
+    adj_factor: Optional[float] = Field(
+        default=None,
+        description="Adjustment factor for price correction (dividends, splits).",
+    )
 
 
 class TushareEquityHistoricalFetcher(
