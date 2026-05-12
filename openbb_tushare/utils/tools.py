@@ -4,6 +4,14 @@ from mysharelib.tools import normalize_symbol
 _ISO_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 _TUSHARE_SUPPORTED_MARKETS = {"SH", "SZ", "BJ", "HK"}
 
+_YAHOO_TO_TUSHARE = {
+    "SS": "SH",
+    "SH": "SH",
+    "SZ": "SZ",
+    "BJ": "BJ",
+    "HK": "HK",
+}
+
 
 def normalize_tushare_symbol_list(symbols: str) -> str:
     """Normalize a comma-separated list of user symbols into Tushare ts_code format.
@@ -17,12 +25,13 @@ def normalize_tushare_symbol_list(symbols: str) -> str:
 
     normalized: list[str] = []
     for raw in [s.strip() for s in symbols.split(",") if s.strip()]:
-        _, full, market = normalize_symbol(raw)
-        if market not in _TUSHARE_SUPPORTED_MARKETS:
+        base, full, market = normalize_symbol(raw)
+        ts_market = _YAHOO_TO_TUSHARE.get(market)
+        if ts_market not in _TUSHARE_SUPPORTED_MARKETS:
             raise ValueError(
                 f"Invalid 'symbol' market for Tushare: '{raw}'. Expected CN (.SS/.SZ/.BJ) or HK (.HK)."
             )
-        normalized.append(full)
+        normalized.append(f"{base}.{ts_market}")
 
     return ",".join(normalized)
 
