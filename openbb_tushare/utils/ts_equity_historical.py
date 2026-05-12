@@ -155,15 +155,21 @@ def get_one(
             )
             logger.info(f"Downloaded {adjust} adjusted historical data {normalized_ts_code}: {len(df_data)} rows from {start_date_str} to {end_date_str}.")
         else:
-            # A-share without adjustment - use pro_bar to get adj_factor
-            freq = 'D' if period == 'daily' else 'W' if period == 'weekly' else 'M'
-            ts.set_token(tushare_api_key)
-            df_data = ts.pro_bar(
+            # A-share without adjustment - use daily + adj_factor
+            df_data = pro.daily(
                 ts_code=normalized_ts_code,
                 start_date=start_date_str,
-                end_date=end_date_str,
-                freq=freq,
+                end_date=end_date_str
             )
+            # Fetch adj_factor separately and merge
+            adj_df = pro.adj_factor(
+                ts_code=normalized_ts_code,
+                start_date=start_date_str,
+                end_date=end_date_str
+            )
+            if not adj_df.empty and not df_data.empty:
+                adj_df = adj_df[['trade_date', 'adj_factor']]
+                df_data = df_data.merge(adj_df, on='trade_date', how='left')
             logger.info(f"Downloaded historical data {normalized_ts_code}: {len(df_data)} rows from {start_date_str} to {end_date_str}.")
 
     # Rename columns to standard names
